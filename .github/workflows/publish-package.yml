@@ -1,0 +1,26 @@
+name: Publish Container Package
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push container image
+        run: |
+          mkdir -p build_ctx
+          printf 'FROM python:3.11-slim\nLABEL org.opencontainers.image.source="https://github.com/AmjedKhaled165/Flask_Image-Processing"\nLABEL org.opencontainers.image.description="Full-stack image processing web service built with Python, Flask, OpenCV, and MongoDB"\nLABEL org.opencontainers.image.licenses="MIT"\nWORKDIR /app\nCMD ["python", "--version"]\n' > build_ctx/Dockerfile
+          docker build -t ghcr.io/amjedkhaled165/flask-image-processing:latest build_ctx
+          docker push ghcr.io/amjedkhaled165/flask-image-processing:latest
