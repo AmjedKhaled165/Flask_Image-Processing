@@ -1,34 +1,77 @@
-# Image Processing Web Application
+# Image Processing Web Service
 
-Welcome to our Image Processing Web Application! This single-page application allows users to upload images, perform various image processing tasks, and save the modified images in their profiles.
+A full-stack web application providing image enhancement routines, dominant color extraction, and user profile media management built with Flask, Pillow, and MongoDB.
 
+---
 
+## Technical Stack
 
-## Technologies Used
+- **Backend Framework**: Python / Flask
+- **Image Processing Engine**: Pillow (PIL)
+- **Database & ODM**: MongoDB with MongoEngine
+- **User Authentication**: Flask-Login session management with salted password hashing
 
-- **Flask:** We used Flask, a lightweight web application framework in Python, to create the backbone of our web application.
-- **Pillow:** Pillow is a Python Imaging Library that provides tools for modifying images, which we utilized for image processing.
-- **MongoEngine:** For managing user data and image storage, we used MongoEngine, an Object-Document Mapper (ODM) for MongoDB.
+---
 
-## Features
+## Core Capabilities
 
-- **User Authentication:** Users can register and log in to access their profiles.
-- **Image Upload:** Users can upload images directly to the application.
-- **Image Processing:** Users can perform various image processing tasks such as adjusting brightness, contrast, resizing, and rotating images.
-- **Image Storage:** Processed images are saved in the user's profile for easy access and download.
+- **Image Enhancement Pipeline**:
+  - Color saturation adjustments (`ImageEnhance.Color`)
+  - Dynamic brightness scaling (`ImageEnhance.Brightness`)
+  - Contrast enhancement (`ImageEnhance.Contrast`)
+  - Kernel-based sharpness filters (`ImageEnhance.Sharpness`)
+- **Color Analysis**: Top-K dominant color clustering via pixel histogram frequency analysis.
+- **Media Persistence**: Per-user image storage, revision history (`.copy` fallback), and download routines.
+- **Session Management**: User registration, login authentication, and secure profile galleries.
 
-## Getting Started
+---
 
-1. Clone this repository to your local machine.
-2. Install the required dependencies: pip install Flask Pillow Flask-MongoEngine
-3. Set up MongoDB and configure your database settings in the Flask application:
-   
-4. Run the Flask application:
-   python app.py
+## Directory Layout
 
-## Contributors
+```
+Flask_Image-Processing/
+├── backend/
+│   ├── image_routines.py     # Pillow manipulation and color analysis functions
+│   ├── routes.py             # HTTP endpoint controllers
+│   ├── models.py             # MongoEngine schemas (User, Image records)
+│   ├── forms.py              # WTForms validation schemas
+│   └── templates/            # Jinja2 rendering templates
+├── static/                   # CSS and client-side assets
+├── app.py                    # Application entry point
+├── requirements.txt          # Python dependencies
+└── Procfile                  # Production deployment configuration
+```
 
-- Hui Du
-- Bhumilkumar Vrajlalbhai Kukadiya
-- James Lord
-- Sree Divya Sudagoni
+---
+
+## Installation & Setup
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/AmjedKhaled165/Flask_Image-Processing.git
+cd Flask_Image-Processing
+```
+
+### 2. Configure Environment
+```bash
+python -m venv venv
+# On Windows:
+.\venv\Scripts\activate
+# On Unix:
+source venv/bin/activate
+
+pip install -r requirements.txt
+```
+
+### 3. Database Connection
+Ensure a local or remote MongoDB instance is running, and export connection variables if required:
+```bash
+# Optional: Set MongoDB URI if connecting to MongoDB Atlas
+set MONGODB_SETTINGS_HOST="mongodb://localhost:27017/image_processing_db"
+```
+
+### 4. Run Application
+```bash
+python app.py
+```
+The server will start at `http://127.0.0.1:5000`.
